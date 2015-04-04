@@ -24,25 +24,30 @@ Player.prototype.update = function() {
   }
 
   // If SPACE key is down, jump
-  var jumpPixels = 2;
   if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)) {
     if (!this.isJumping) {
       this.isJumping = true;
       this.jumpTick = 0;
     }
   }
-
   if (this.isJumping) {
-    this.jumpTick += 1;
-    if (this.jumpTick <= 10) {
-      this.center.y -= jumpPixels;
-    } else {
-      this.center.y += jumpPixels;
-    }
-
-    if (this.jumpTick >= 20) {
-      this.jumpTick = 0;
-      this.isJumping = false;
-    }
+    this.updateJump();
   }
+};
+
+Player.prototype.updateJump = function () {
+  var maxHeight = 150.0;
+  var hangTime = 20.0; // In game ticks
+
+  // Use physics to calculate velocity, acceleration
+  // d = vt + 0.5at^2
+  var initialVelocity = (4 * maxHeight) / (hangTime);
+  var gravity = -2 * initialVelocity / hangTime;
+  var velocity = initialVelocity + (gravity * this.jumpTick);
+  if (this.jumpTick > hangTime) {
+    this.isJumping = false;
+    return;
+  }
+  this.jumpTick += 1;
+  this.center.y -= velocity;
 };
