@@ -6,6 +6,7 @@ var Character = function(game, location) {
     jumpHeight: 50,
     jumpTime: 25 // in Game Ticks
   };
+  this.size = { x: 20, y: 30 };
   this.state.jumping = false;
   this.state.jumpStart = 0;
   this.state.facingDirection = 'left';
@@ -43,4 +44,36 @@ Character.prototype.updateJump = function () {
     return;
   }
   this.location.y -= velocity;
+};
+
+/**
+ * @param screen - the canvas context to draw in
+ * @param locationX - the leftmost pixel index to start drawing head (on the canvas screen)
+ * @param bodyWidthPct - decimal in [0, 1]. How wide is body compared to Character width
+ * @param bodyHeightPct - decimal in [0, 1]. How wide is body compared to Character height
+ * @param color - String. Hex color code (eg '#FF0000')
+ */
+Character.prototype._drawBody = function (screen, locationX, bodyWidthPct, bodyHeightPct, color) {
+  screen.fillStyle = color;
+  screen.fillRect(locationX + this.size.x * (1 - bodyWidthPct) / 2,
+                  this.location.y - this.size.y * bodyHeightPct,
+                  this.size.x * bodyWidthPct,
+                  this.size.y * bodyHeightPct);
+};
+
+/**
+ * @param screen - the canvas context to draw in
+ * @param locationX - the leftmost pixel index to start drawing head (on the canvas screen)
+ * @param headRadius
+ * @param color - String. Hex color code (eg '#FF0000')
+ */
+Character.prototype._drawHead = function (screen, locationX, headRadius, color) {
+  var headCenterY = this.location.y - this.size.y + headRadius;
+  screen.beginPath();
+  screen.arc(locationX + this.size.x * 0.5,
+             headCenterY,
+             headRadius,
+             0, 2 * Math.PI);
+  screen.fillStyle = color;
+  screen.fill();
 };

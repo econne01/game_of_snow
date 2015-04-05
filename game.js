@@ -21,7 +21,10 @@ var Game = function (canvas) {
 
   // Add the main characters to the game.
   this.createPlayer({x: 100, y: 270});
-  this.createEnemy({x: 300, y: 270});
+  var paceRange = { left: 250, right: 350 };
+  this.createEnemy({x: 300, y: 270}, paceRange);
+  paceRange = { left: 500, right: 650 };
+  this.createEnemy({x: 600, y: 270}, paceRange);
 
   // Main game tick function.  Loops forever, running 60ish times a second.
   var tick = function() {
@@ -74,8 +77,8 @@ Game.prototype = {
   },
 
   // **createEnemy()** creates an enemy character and adds to game
-  createEnemy: function(location) {
-    var enemy = new Enemy(this, location);
+  createEnemy: function(location, paceRange) {
+    var enemy = new Enemy(this, location, paceRange);
     this.addBody(enemy);
   },
 

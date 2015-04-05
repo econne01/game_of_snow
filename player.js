@@ -22,24 +22,16 @@ Player.prototype.draw = function(screen) {
   var BLACK = "#000000";
   var CREAM = '#FFCCAA';
   var locationX = this.location.x - this.game.location.x;
+
   // Draw body
-  var bodyWidthPct = 0.3;
+  var bodyWidthPct = 0.4;
   var bodyHeightPct = 0.5;
-  screen.fillStyle = OFF_BLACK;
-  screen.fillRect(locationX + this.size.x * (1 - bodyWidthPct) / 2,
-                  this.location.y - this.size.y * bodyHeightPct,
-                  this.size.x * bodyWidthPct, this.size.y * bodyHeightPct);
+  this._drawBody(screen, locationX, bodyWidthPct, bodyHeightPct, OFF_BLACK);
 
   // Draw head
   var headRadius = this.size.x * 0.5;
   var headCenterY = this.location.y - this.size.y + headRadius;
-  screen.beginPath();
-  screen.arc(locationX + this.size.x * 0.5,
-             headCenterY,
-             headRadius,
-             0, 2 * Math.PI);
-  screen.fillStyle = CREAM;
-  screen.fill();
+  this._drawHead(screen, locationX, headRadius, CREAM);
 
   // Draw beard
   var beardArcLength = 0.75 * Math.PI;
@@ -51,7 +43,7 @@ Player.prototype.draw = function(screen) {
                beardRadius,
                ARC.BOTTOM - beardArcLength,
                ARC.BOTTOM);
-  } else {
+  } else if (this.state.facingDirection === 'right') {
     screen.arc(locationX + this.size.x * 0.75,
                headCenterY,
                beardRadius,
