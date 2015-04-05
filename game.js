@@ -21,6 +21,10 @@ var Game = function (canvas) {
   // Create the bodies array to hold the player, enemies, etc.
   this.bodies = [];
 
+  // Add scenery objects
+  var wall = new Wall(this, { x: 740, y: 300 });
+  this.addBody(wall);
+
   // Add the main characters to the game.
   this.createPlayer({x: 700, y: 270});
   var paceRange = { left: 250, right: 350 };
