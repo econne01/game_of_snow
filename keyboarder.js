@@ -8,6 +8,7 @@ var Keyboarder = function() {
     UP: 'up',
     NONE: 'none'
   };
+  this.STATES = STATES;
 
   this.KEYS = {
     LEFT: 37,
@@ -20,7 +21,9 @@ var Keyboarder = function() {
 
   // When key goes down, record that it is down.
   window.addEventListener('keydown', function(e) {
-    keyState[e.keyCode] = STATES.DOWN;
+    if (!(e.keyCode in keyState) || keyState[e.keyCode] === STATES.UP) {
+      keyState[e.keyCode] = STATES.DOWN;
+    }
   });
 
   // When key goes up, record that it is up.
@@ -30,7 +33,7 @@ var Keyboarder = function() {
 
   // Set the given keyCode to given state
   this.setKeyState = function(keyCode, state) {
-    return keyState[keyCode] === state;
+    return keyState[keyCode] = state;
   };
 
   this.isDown = function(keyCode) {
