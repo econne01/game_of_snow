@@ -6,17 +6,27 @@ var Game = function (canvas) {
   // Get the drawing context.  This contains functions that let you draw to the canvas.
   var screen = canvas.getContext('2d');
 
+  this.keyboarder = new Keyboarder();
+  this.tickCount = 0;
+
   // Note down the dimensions of the canvas.  These are used to
   // place game bodies.
-  this.size = { x: canvas.width, y: canvas.height };
+  this.screenSize = { x: screen.canvas.width, y: screen.canvas.height };
+  this.size = { x: 800, y: canvas.height };
+  this.scrollBuffer = 120;
+  this.location = { x: 0, y: this.size.y };
 
   // Create the bodies array to hold the player, enemies, etc.
   this.bodies = [];
 
-  this.keyboarder = new Keyboarder();
+  // Add the main characters to the game.
+  this.createPlayer({x: 100, y: 270});
+  this.createEnemy({x: 300, y: 270});
 
   // Main game tick function.  Loops forever, running 60ish times a second.
   var tick = function() {
+    self.tickCount += 1;
+
     // Update game state.
     self.update();
 
@@ -27,8 +37,6 @@ var Game = function (canvas) {
     requestAnimationFrame(tick);
   };
 
-  // Add the main character to the bodies array.
-  this.createPlayer();
   // Run the first game tick.  All future calls will be scheduled by
   // the tick() function itself.
   tick();
@@ -38,8 +46,6 @@ Game.prototype = {
 
   // **update()** runs the main game logic.
   update: function() {
-    var self = this;
-
     // Call update on every body.
     for (var i = 0; i < this.bodies.length; i++) {
       this.bodies[i].update();
@@ -49,7 +55,7 @@ Game.prototype = {
   // **draw()** draws the game.
   draw: function(screen) {
     // Clear away the drawing from the previous tick.
-    screen.clearRect(0, 0, this.size.x, this.size.y);
+    screen.clearRect(0, 0, this.screenSize.x, this.screenSize.y);
 
     // Draw each body as a rectangle.
     for (var i = 0; i < this.bodies.length; i++) {
@@ -57,14 +63,25 @@ Game.prototype = {
     }
   },
 
+  // **scroll()** pans the screen across the game board to left or right
+  scroll: function (dimension, amount) {
+    this.location[dimension] += amount;
+  },
+
   // **addBody()** adds a body to the bodies array.
   addBody: function(body) {
     this.bodies.push(body);
   },
 
+  // **createEnemy()** creates an enemy character and adds to game
+  createEnemy: function(location) {
+    var enemy = new Enemy(this, location);
+    this.addBody(enemy);
+  },
+
   // **createPlayer()** creates the main hero and adds to game
-  createPlayer: function() {
-    var player = new Player(this);
+  createPlayer: function(location) {
+    var player = new Player(this, location);
     this.addBody(player);
   }
 };

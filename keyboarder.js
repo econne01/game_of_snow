@@ -1,29 +1,39 @@
 // **new Keyboarder()** creates a new keyboard input tracking object.
 var Keyboarder = function() {
+  var self = this;
+
+  // Handy constants that give human-readable names.
+  var STATES = {
+    DOWN: 'down',
+    UP: 'up',
+    NONE: 'none'
+  };
+
+  this.KEYS = {
+    LEFT: 37,
+    RIGHT: 39,
+    SPACE: 32
+  };
 
   // Records up/down state of each key that has ever been pressed.
   var keyState = {};
 
   // When key goes down, record that it is down.
   window.addEventListener('keydown', function(e) {
-    keyState[e.keyCode] = true;
+    keyState[e.keyCode] = STATES.DOWN;
   });
 
   // When key goes up, record that it is up.
   window.addEventListener('keyup', function(e) {
-    keyState[e.keyCode] = false;
+    keyState[e.keyCode] = STATES.UP;
   });
 
-  // Returns true if passed key is currently down.  `keyCode` is a
-  // unique number that represents a particular key on the keyboard.
-  this.isDown = function(keyCode) {
-    return keyState[keyCode] === true;
+  // Set the given keyCode to given state
+  this.setKeyState = function(keyCode, state) {
+    return keyState[keyCode] === state;
   };
 
-  // Handy constants that give keyCodes human-readable names.
-  this.KEYS = {
-    LEFT: 37,
-    RIGHT: 39,
-    SPACE: 32
+  this.isDown = function(keyCode) {
+    return keyState[keyCode] === STATES.DOWN;
   };
 };
