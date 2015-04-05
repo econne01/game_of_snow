@@ -1,3 +1,12 @@
+var ARC = {
+  TOP: 1.5 * Math.PI,
+  BOTTOM: 0.5 * Math.PI,
+  LEFT: 0.0 * Math.PI,
+  RIGHT: 1.0 * Math.PI,
+  START: 0.0 * Math.PI,
+  END: 2.0 * Math.PI
+};
+
 var Player = function(game, location) {
   Character.call(this, game, location);
   this.config.moveSizeX = 3;
@@ -9,59 +18,82 @@ Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.draw = function(screen) {
+  var OFF_BLACK = "#404040";
   var BLACK = "#000000";
   var CREAM = '#FFCCAA';
-  var PlayerX = this.location.x - this.game.location.x;
+  var locationX = this.location.x - this.game.location.x;
   // Draw body
-  screen.fillStyle = BLACK;
-  screen.fillRect(PlayerX + this.size.x * 0.2,
-                  this.location.y - this.size.y * 0.5,
-                  this.size.x * 0.6, this.size.y * 0.5);
+  var bodyWidthPct = 0.3;
+  var bodyHeightPct = 0.5;
+  screen.fillStyle = OFF_BLACK;
+  screen.fillRect(locationX + this.size.x * (1 - bodyWidthPct) / 2,
+                  this.location.y - this.size.y * bodyHeightPct,
+                  this.size.x * bodyWidthPct, this.size.y * bodyHeightPct);
+
   // Draw head
+  var headRadius = this.size.x * 0.5;
+  var headCenterY = this.location.y - this.size.y + headRadius;
   screen.beginPath();
-  screen.arc(PlayerX + this.size.x * 0.5,
-             this.location.y - this.size.y * 0.67,
-             this.size.y * 0.33,
+  screen.arc(locationX + this.size.x * 0.5,
+             headCenterY,
+             headRadius,
              0, 2 * Math.PI);
   screen.fillStyle = CREAM;
   screen.fill();
 
   // Draw beard
+  var beardArcLength = 0.75 * Math.PI;
+  var beardRadius = headRadius * 0.9;
   screen.beginPath();
   if (this.state.facingDirection === 'left') {
-    screen.arc(PlayerX + this.size.x * 0.25,
-            this.location.y - this.size.y * 0.67,
-            this.size.y * 0.30,
-            -0.25 * Math.PI, 0.5 * Math.PI);
+    screen.arc(locationX + this.size.x * 0.25,
+               headCenterY,
+               beardRadius,
+               ARC.BOTTOM - beardArcLength,
+               ARC.BOTTOM);
   } else {
-    screen.arc(PlayerX + this.size.x * 0.75,
-            this.location.y - this.size.y * 0.67,
-            this.size.y * 0.30,
-            0.5 * Math.PI, 1.25 * Math.PI);
+    screen.arc(locationX + this.size.x * 0.75,
+               headCenterY,
+               beardRadius,
+               ARC.BOTTOM,
+               ARC.BOTTOM + beardArcLength);
   }
   screen.lineWidth = 3;
   screen.strokeStyle = BLACK;
   screen.stroke();
 
   // Draw hair
+  var hairWidthPct = 0.35;
+  var hairHeightPct = 0.4;
+  var hairRadius = headRadius * 0.73;
+  var hairArcLength = 0.8 * Math.PI;
+  var hairArcTopOffset = 0.2 * Math.PI;
   screen.fillStyle = BLACK;
   screen.beginPath();
   if (this.state.facingDirection === 'left') {
-    screen.fillRect(PlayerX + this.size.x * 0.65,
+    // Long hair
+    screen.fillRect(locationX + this.size.x * (1 - hairWidthPct),
                     this.location.y - this.size.y * 0.75,
-                    this.size.x * 0.35, this.size.y * 0.4);
-    screen.arc(PlayerX + this.size.x * 0.5,
-            this.location.y - this.size.y * 0.67,
-            this.size.y * 0.24,
-            1.3 * Math.PI, 2.1 * Math.PI);
-  } else {
-    screen.fillRect(PlayerX,
+                    this.size.x * hairWidthPct,
+                    this.size.y * hairHeightPct);
+    // Top of head hair
+    screen.arc(locationX + this.size.x * 0.5,
+               headCenterY,
+               hairRadius,
+               ARC.TOP - hairArcTopOffset,
+               ARC.TOP - hairArcTopOffset + hairArcLength);
+  } else if (this.state.facingDirection === 'right') {
+    // Long hair
+    screen.fillRect(locationX,
                     this.location.y - this.size.y * 0.75,
-                    this.size.x * 0.35, this.size.y * 0.4);
-    screen.arc(PlayerX + this.size.x * 0.5,
-            this.location.y - this.size.y * 0.67,
-            this.size.y * 0.24,
-            0.9 * Math.PI, 1.7 * Math.PI);
+                    this.size.x * hairWidthPct,
+                    this.size.y * hairHeightPct);
+    // Top of head hair
+    screen.arc(locationX + this.size.x * 0.5,
+               headCenterY,
+               hairRadius,
+               ARC.TOP + hairArcTopOffset - hairArcLength,
+               ARC.TOP + hairArcTopOffset);
   }
   screen.lineWidth = 6;
   screen.strokeStyle = BLACK;
@@ -101,6 +133,7 @@ Player.prototype.update = function() {
     if (!this.state.jumping) {
       this.state.jumping = true;
       this.state.jumpStart = this.game.tickCount;
+      this.keyboarder.setKeyState(this.keyboarder.KEYS.SPACE, this.keyboarder.STATES.NONE);
     }
   }
   if (this.state.jumping) {
