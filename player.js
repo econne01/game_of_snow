@@ -11,7 +11,7 @@ var Player = function(game, location) {
   Character.call(this, game, location);
   this.config.moveSizeX = 3;
   this.size = { x: 20, y: 30 };
-  this.state.facingDirection = 'right';
+  this.state.facingDirection = 'left';
 };
 
 Player.prototype = Object.create(Character.prototype);
@@ -110,6 +110,7 @@ Player.prototype.moveRight = function () {
 };
 
 Player.prototype.update = function() {
+  var self = this;
   Character.prototype.update.call(this);
 
   if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
@@ -131,4 +132,14 @@ Player.prototype.update = function() {
   if (this.state.jumping) {
     this.updateJump();
   }
+
+  // Check if player is hit by enemy
+  this.game.bodies.forEach(function (gameObj) {
+      if (gameObj instanceof Enemy && self.isColliding(gameObj)) {
+          self.state.health -= 1;
+          if (self.state.health <= 0) {
+              self.game.gameOver();
+          }
+      }
+  });
 };

@@ -3,10 +3,11 @@ var Character = function(game, location) {
   GameObject.call(this, game, location);
   this.config = {
     moveSizeX: 2,
-    jumpHeight: 50,
+    jumpHeight: 60,
     jumpTime: 25 // in Game Ticks
   };
   this.size = { x: 20, y: 30 };
+  this.state.health = 1;
   this.state.jumping = false;
   this.state.jumpStart = 0;
   this.state.facingDirection = 'left';

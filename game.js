@@ -5,6 +5,7 @@ var Game = function (canvas) {
 
   // Get the drawing context.  This contains functions that let you draw to the canvas.
   var screen = canvas.getContext('2d');
+  this.inProgress = true;
 
   this.keyboarder = new Keyboarder();
   this.tickCount = 0;
@@ -14,13 +15,14 @@ var Game = function (canvas) {
   this.screenSize = { x: screen.canvas.width, y: screen.canvas.height };
   this.size = { x: 800, y: canvas.height };
   this.scrollBuffer = 120;
-  this.location = { x: 0, y: this.size.y };
+  this.location = { x: this.size.x - this.screenSize.x,
+                    y: this.size.y };
 
   // Create the bodies array to hold the player, enemies, etc.
   this.bodies = [];
 
   // Add the main characters to the game.
-  this.createPlayer({x: 100, y: 270});
+  this.createPlayer({x: 700, y: 270});
   var paceRange = { left: 250, right: 350 };
   this.createEnemy({x: 300, y: 270}, paceRange);
   paceRange = { left: 500, right: 650 };
@@ -28,6 +30,10 @@ var Game = function (canvas) {
 
   // Main game tick function.  Loops forever, running 60ish times a second.
   var tick = function() {
+    if (!self.inProgress) {
+      console.log('Game Over!');
+      return;
+    }
     self.tickCount += 1;
 
     // Update game state.
@@ -86,6 +92,11 @@ Game.prototype = {
   createPlayer: function(location) {
     var player = new Player(this, location);
     this.addBody(player);
+  },
+
+  // **gameOver()** ends the game. You lose!
+  gameOver: function() {
+    this.inProgress = false;
   }
 };
 

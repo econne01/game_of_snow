@@ -1,0 +1,8 @@
+.game__container {
+    width: 100%;
+    text-align: center;
+}
+
+canvas {
+    background: #E6E6F6; /* Winter Gray */
+}

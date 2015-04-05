@@ -26,6 +26,18 @@ GameObject.prototype = {
   },
 
   isColliding: function (otherObject) {
+    if (this.location.x <= otherObject.location.x + otherObject.size.x &&
+        this.location.x >= otherObject.location.x &&
+        this.location.y - this.size.y <= otherObject.location.y &&
+        this.location.y >= otherObject.location.y) {
+      return true;
+    }
+    if (otherObject.location.x <= this.location.x + this.size.x &&
+        otherObject.location.x >= this.location.x &&
+        otherObject.location.y - otherObject.size.y <= this.location.y &&
+        otherObject.location.y >= this.location.y) {
+      return true;
+    }
     return false;
   }
 };
