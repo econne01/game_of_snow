@@ -14,8 +14,16 @@
     <body>
         <h1>Game of Thrones game
         </h1>
-        <div class="game__container">
+        <div class="container">
             <canvas id="game_canvas" width="500" height="300"></canvas>
+        </div>
+        <div class="game__alert hidden">
+            Game Over!
+        </div>
+        <div class="container">
+            <button id="restart_button" class="restart button hidden">
+                Restart Game
+            </button>
         </div>
         <script src="keyboarder.js"></script>
         <script src="game_object.js"></script>

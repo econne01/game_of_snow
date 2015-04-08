@@ -1,6 +1,20 @@
-.game__container {
+.container {
     width: 100%;
     text-align: center;
+}
+
+.game__alert {
+    text-align: center;
+    color: crimson;
+}
+
+.restart {
+    text-align: center;
+    color: blue;
+}
+
+.hidden {
+    display: none;
 }
 
 canvas {
