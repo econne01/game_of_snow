@@ -12,6 +12,7 @@ var Player = function(game, location) {
   this.config.moveSizeX = 3;
   this.size = { x: 20, y: 30 };
   this.state.facingDirection = 'left';
+  this.leftMostTravelled = this.location.x;
 };
 
 Player.prototype = Object.create(Character.prototype);
@@ -22,6 +23,11 @@ Player.prototype.draw = function(screen) {
   var BLACK = "#000000";
   var CREAM = '#FFCCAA';
   var locationX = this.location.x - this.game.location.x;
+
+  // If Player is at right of screen, he should "enter" the Wall and be hidden
+  if (this.location.x >= 740) {
+      return;
+  }
 
   // Draw body
   var bodyWidthPct = 0.4;
@@ -110,14 +116,12 @@ Player.prototype.moveRight = function () {
 };
 
 Player.prototype.update = function() {
-  var self = this;
   Character.prototype.update.call(this);
 
+  // Move Left or Right
   if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
-    // If left cursor key is down move left.
     this.moveLeft();
   } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
-    // If right key is down, move right.
     this.moveRight();
   }
 
@@ -135,11 +139,27 @@ Player.prototype.update = function() {
 
   // Check if player is hit by enemy
   this.game.bodies.forEach(function (gameObj) {
-      if (gameObj instanceof Enemy && self.isColliding(gameObj)) {
-          self.state.health -= 1;
-          if (self.state.health <= 0) {
-              self.game.gameOver();
+      if (gameObj instanceof Enemy && this.isColliding(gameObj)) {
+          this.state.health -= 1;
+          if (this.state.health <= 0) {
+              this.game.gameOver();
           }
       }
-  });
+  }, this);
+
+  // Set farthest travelled point
+  if (this.location.x < this.leftMostTravelled) {
+      this.leftMostTravelled = this.location.x;
+  }
+
+  // Win the game
+  if (this.isGameWinner()) {
+    if (this.leftMostTravelled <= 50) {
+        this.game.win();
+    }
+  }
+};
+
+Player.prototype.isGameWinner = function () {
+  return this.location.x >= 750;
 };

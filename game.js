@@ -22,7 +22,7 @@ var Game = function (canvas) {
   this.bodies = [];
 
   // Add scenery objects
-  var wall = new Wall(this, { x: 740, y: 300 });
+  var wall = new Wall(this, { x: 660, y: 300 });
   this.addBody(wall);
 
   // Add the main characters to the game.
@@ -35,7 +35,6 @@ var Game = function (canvas) {
   // Main game tick function.  Loops forever, running 60ish times a second.
   var tick = function() {
     if (!self.inProgress) {
-      console.log('Game Over!');
       return;
     }
     self.tickCount += 1;
@@ -101,6 +100,12 @@ Game.prototype = {
   // **gameOver()** ends the game. You lose!
   gameOver: function() {
     this.inProgress = false;
+  },
+
+  // **win()** ends the game. You win!
+  win: function() {
+    this.inProgress = false;
+    console.log('You are a winner!');
   }
 };
 
