@@ -1,12 +1,3 @@
-var ARC = {
-  TOP: 1.5 * Math.PI,
-  BOTTOM: 0.5 * Math.PI,
-  LEFT: 0.0 * Math.PI,
-  RIGHT: 1.0 * Math.PI,
-  START: 0.0 * Math.PI,
-  END: 2.0 * Math.PI
-};
-
 var Player = function(game, location) {
   Character.call(this, game, location);
   this.config.moveSizeX = 3;

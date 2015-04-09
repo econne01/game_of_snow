@@ -1,3 +1,12 @@
+var ARC = {
+  TOP: 1.5 * Math.PI,
+  BOTTOM: 0.5 * Math.PI,
+  LEFT: 0.0 * Math.PI,
+  RIGHT: 1.0 * Math.PI,
+  START: 0.0 * Math.PI,
+  END: 2.0 * Math.PI
+};
+
 // Initialize character state and configurable variables
 var Character = function(game, location) {
   GameObject.call(this, game, location);

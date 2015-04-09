@@ -33,11 +33,14 @@ Game.prototype = {
     this.addBody(wall);
 
     // Add the main characters to the game.
-    this.createPlayer({x: 700, y: 270});
+    this.addBody(new Player(this, {x: 700, y: 270}));
+    this.addBody(new Ghost(this, {x: 50, y: 270}));
+
+    // Add the White Walkers
     var paceRange = { left: 250, right: 350 };
-    this.createEnemy({x: 300, y: 270}, paceRange);
+    this.addBody(new Enemy(this, {x: 300, y: 270}, paceRange));
     paceRange = { left: 500, right: 650 };
-    this.createEnemy({x: 600, y: 270}, paceRange);
+    this.addBody(new Enemy(this, {x: 600, y: 270}, paceRange));
 
     // Main game tick function.  Loops forever, running 60ish times a second.
     var tick = function() {
@@ -88,18 +91,6 @@ Game.prototype = {
   // **addBody()** adds a body to the bodies array.
   addBody: function(body) {
     this.bodies.push(body);
-  },
-
-  // **createEnemy()** creates an enemy character and adds to game
-  createEnemy: function(location, paceRange) {
-    var enemy = new Enemy(this, location, paceRange);
-    this.addBody(enemy);
-  },
-
-  // **createPlayer()** creates the main hero and adds to game
-  createPlayer: function(location) {
-    var player = new Player(this, location);
-    this.addBody(player);
   },
 
   // **gameOver()** ends the game. You lose!
