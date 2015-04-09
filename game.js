@@ -33,7 +33,8 @@ Game.prototype = {
     this.addBody(wall);
 
     // Add the main characters to the game.
-    this.addBody(new Player(this, {x: 700, y: 270}));
+    this.player = new Player(this, {x: 700, y: 270});
+    this.addBody(this.player);
     this.addBody(new Ghost(this, {x: 50, y: 270}));
 
     // Add the White Walkers

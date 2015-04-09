@@ -130,12 +130,12 @@ Player.prototype.update = function() {
 
   // Check if player is hit by enemy
   this.game.bodies.forEach(function (gameObj) {
-      if (gameObj instanceof Enemy && this.isColliding(gameObj)) {
-          this.state.health -= 1;
-          if (this.state.health <= 0) {
-              this.game.gameOver();
-          }
+    if (gameObj instanceof Enemy && this.isColliding(gameObj)) {
+      this.state.health -= 1;
+      if (this.state.health <= 0) {
+        this.game.gameOver();
       }
+    }
   }, this);
 
   // Set farthest travelled point
