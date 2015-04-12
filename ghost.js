@@ -17,6 +17,11 @@ Ghost.prototype.draw = function(screen) {
   var BLACK = '#000000';
   var locationX = this.location.x - this.game.location.x;
 
+  // If Ghost is at right of screen, he should "enter" the Wall and be hidden
+  if (this.location.x >= 720) {
+      return;
+  }
+
   // Define a config object to give all relative sizes of this character
   // width, height denote percentage of total body size
   // x, y denote left/top most index for rect or center for arcs

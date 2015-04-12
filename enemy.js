@@ -10,12 +10,18 @@ Enemy.prototype.draw = function(screen) {
   var OFF_WHITE = "#F1FBFF";
   var BLUE = "#3BAFE7";
   var PALE_GOLD = '#FBEFCB';
+  var BROWN = '#993300';
   var locationX = this.location.x - this.game.location.x;
 
   // Draw body
   var bodyWidthPct = 0.4;
   var bodyHeightPct = 0.5;
   this._drawBody(screen, locationX, bodyWidthPct, bodyHeightPct, OFF_WHITE);
+  screen.fillStyle = BROWN;
+  screen.fillRect(locationX + this.size.x * (1 - bodyWidthPct) / 2,
+                  this.location.y - this.size.y * bodyHeightPct * 0.35,
+                  this.size.x * bodyWidthPct,
+                  this.size.y * bodyHeightPct * 0.15);
 
   // Draw head
   var headRadius = this.size.x * 0.5;

@@ -1,3 +1,47 @@
+// the Ground
+var Ground = function(game, location) {
+  GameObject.call(this, game, location);
+  this.size = { x: this.game.size.x,
+                y: 30};
+};
+
+Ground.prototype = Object.create(GameObject.prototype);
+Ground.prototype.constructor = Ground;
+
+Ground.prototype.draw = function (screen) {
+  var WHITE = "#FFFFFF";
+  var OFF_WHITE = "#E9E0D6";
+  var locationX = this.location.x - this.game.location.x;
+  var horizonHeight = 97;
+  screen.fillStyle = WHITE;
+  screen.fillRect(locationX, this.location.y - this.size.y,
+                  this.size.x, this.size.y);
+  screen.fillStyle = OFF_WHITE;
+  screen.fillRect(locationX, this.location.y - horizonHeight,
+                  this.size.x, horizonHeight - this.size.y);
+};
+
+var SnowMound = function (game, location, height, width, color) {
+  GameObject.call(this, game, location);
+  this.color = color;
+  this.height = height;
+  this.width = width;
+};
+
+SnowMound.prototype = Object.create(GameObject.prototype);
+SnowMound.prototype.constructor = SnowMound;
+
+SnowMound.prototype.draw = function (screen) {
+  var locationX = this.location.x - this.game.location.x;
+  var radius = this.height * 2;
+  screen.fillStyle = this.color;
+  screen.arc(locationX + this.width * 0.5,
+             this.location.y + 0,
+             radius,
+             Math.PI * 1.2, Math.PI * 1.8);
+  screen.fill();
+};
+
 // The Wall
 var Wall = function(game, location) {
   var self = this;

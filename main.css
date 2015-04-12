@@ -18,5 +18,8 @@
 }
 
 canvas {
-    background: #E6E6F6; /* Winter Gray */
+    background: #D6EEFF; /* Pale Winter Sky Blue */
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
 }

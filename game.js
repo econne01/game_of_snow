@@ -20,6 +20,8 @@ Game.prototype = {
   // **startGame()** initializes the level and starts game
   startGame: function(screen) {
     var self = this;
+    var WHITE = '#FFFFFF';
+    var OFF_WHITE = '#DFDFDF';
     this.inProgress = true;
 
     this.location = { x: this.size.x - this.screenSize.x,
@@ -29,8 +31,10 @@ Game.prototype = {
     this.bodies = [];
 
     // Add scenery objects
+    this.addBody(new Ground(this, { x: 0, y: 300 }));
+    // this.addBody(new SnowMound(this, { x: 500, y: 200 }, 50, 150, WHITE));
     this.addBody(new Wall(this, { x: 660, y: 300 }));
-    this.addBody(new Weirwood(this, { x: 425, y: 270 }));
+    this.addBody(new Weirwood(this, { x: 425, y: 260 }));
 
     // Add the main characters to the game.
     this.player = new Player(this, {x: 700, y: 270});
