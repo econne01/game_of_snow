@@ -35,7 +35,7 @@ Game.prototype = {
     // Add the main characters to the game.
     this.player = new Player(this, {x: 700, y: 270});
     this.addBody(this.player);
-    this.addBody(new Ghost(this, {x: 650, y: 270}));
+    this.addBody(new Ghost(this, {x: 50, y: 270}));
 
     // Add the White Walkers
     var paceRange = { left: 250, right: 350 };

@@ -20,10 +20,32 @@ Player.prototype.draw = function(screen) {
       return;
   }
 
+  // Define a config object to give all relative sizes of this character
+  // width, height denote percentage of total body size
+  // x, y denote left/top most index for rect or center for arcs
+  var config = {
+    body: {type: 'rectangle', width: 0.4, height: 0.5, x: 0.3, y: 0},
+    cape: {type: 'triangle', width: 0.4, height: 0.6, x: 0.3, y: -0.1}
+  };
+  for (var bodyPart in config) {
+    if (this.state.facingDirection === 'left') {
+      config[bodyPart].x = 1 - config[bodyPart].x;
+      if (config[bodyPart].type === 'rectangle') {
+          // For rect, we must shift it left by width also
+          config[bodyPart].x -= config[bodyPart].width;
+      }
+    }
+    config[bodyPart].x *= this.size.x;
+    config[bodyPart].y *= this.size.y;
+    config[bodyPart].width *= this.size.x;
+    config[bodyPart].height *= this.size.y;
+  }
+
   // Draw body
-  var bodyWidthPct = 0.4;
-  var bodyHeightPct = 0.5;
-  this._drawBody(screen, locationX, bodyWidthPct, bodyHeightPct, OFF_BLACK);
+  screen.fillStyle = OFF_BLACK;
+  screen.fillRect(locationX + config.body.x,
+                  this.location.y - config.body.y - config.body.height,
+                  config.body.width, config.body.height);
 
   // Draw head
   var headRadius = this.size.x * 0.5;
@@ -87,6 +109,18 @@ Player.prototype.draw = function(screen) {
   screen.lineWidth = 6;
   screen.strokeStyle = BLACK;
   screen.stroke();
+
+  // Draw cape
+  var capeTailX = config.cape.width * (this.state.facingDirection === 'left' ? 1 : -1);
+  screen.beginPath();
+  screen.moveTo(locationX + config.cape.x,
+                this.location.y - config.cape.y - config.cape.height);
+  screen.lineTo(locationX + config.cape.x + capeTailX,
+                this.location.y - config.cape.y);
+  screen.lineTo(locationX + config.cape.x,
+                this.location.y - config.cape.y);
+  screen.fillStyle = BLACK;
+  screen.fill();
 };
 
 Player.prototype.moveLeft = function () {
