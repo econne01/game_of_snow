@@ -3,7 +3,7 @@ var Player = function(game, location) {
   this.config.moveSizeX = 3;
   this.size = { x: 20, y: 30 };
   this.state.facingDirection = 'left';
-  this.leftMostTravelled = this.location.x;
+  this.possessions = [];
 };
 
 Player.prototype = Object.create(Character.prototype);
@@ -171,19 +171,16 @@ Player.prototype.update = function() {
     }
   }, this);
 
-  // Set farthest travelled point
-  if (this.location.x < this.leftMostTravelled) {
-      this.leftMostTravelled = this.location.x;
-  }
-
-  // Win the game
-  if (this.isGameWinner()) {
-    if (this.leftMostTravelled <= 50) {
+  // Win the game if you have Ghost
+  if (this.isUnderWall()) {
+    this.possessions.forEach(function (gameObj) {
+      if (gameObj instanceof Ghost) {
         this.game.win();
-    }
+      }
+    }, this);
   }
 };
 
-Player.prototype.isGameWinner = function () {
+Player.prototype.isUnderWall = function () {
   return this.location.x >= 750;
 };

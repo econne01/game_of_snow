@@ -160,6 +160,7 @@ Ghost.prototype.update = function () {
   // Check if player has picked up Ghost
   if (this.isColliding(this.game.player)) {
     this.state.following = this.game.player;
+    this.game.player.possessions.push(this);
   }
 
   if (this.state.following) {
