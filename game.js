@@ -29,19 +29,21 @@ Game.prototype = {
     this.bodies = [];
 
     // Add scenery objects
-    var wall = new Wall(this, { x: 660, y: 300 });
-    this.addBody(wall);
+    this.addBody(new Wall(this, { x: 660, y: 300 }));
+    this.addBody(new Weirwood(this, { x: 425, y: 270 }));
 
     // Add the main characters to the game.
     this.player = new Player(this, {x: 700, y: 270});
     this.addBody(this.player);
-    this.addBody(new Ghost(this, {x: 50, y: 270}));
+    this.addBody(new Ghost(this, {x: 650, y: 270}));
 
     // Add the White Walkers
     var paceRange = { left: 250, right: 350 };
     this.addBody(new Enemy(this, {x: 300, y: 270}, paceRange));
     paceRange = { left: 500, right: 650 };
     this.addBody(new Enemy(this, {x: 600, y: 270}, paceRange));
+    paceRange = { left: 410, right: 470 };
+    this.addBody(new Enemy(this, {x: 450, y: 270}, paceRange));
 
     // Main game tick function.  Loops forever, running 60ish times a second.
     var tick = function() {

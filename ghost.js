@@ -2,6 +2,8 @@ var Ghost = function(game, location) {
   Character.call(this, game, location);
   this.size = { x: 48, y: 30 };
   this.config.followSize = { x: 0, y: 0};
+  this.config.jumpHeight = 80;
+  this.config.jumpTime = 30; // in Game Ticks
   this.state.following = null;
   this.state.facingDirection = 'right';
 };
@@ -161,14 +163,19 @@ Ghost.prototype.update = function () {
   }
 
   if (this.state.following) {
-    this.config.followSize.x = this.state.following.size.x * 0.5;
-    this.state.facingDirection = this.state.following.state.facingDirection;
+    var following = this.state.following;
+    this.config.followSize.x = following.size.x * 0.5;
+    this.state.facingDirection = following.state.facingDirection;
 
     if (this.state.facingDirection === 'left') {
-      this.location.x = this.state.following.location.x + this.state.following.size.x + this.config.followSize.x;
+      this.location.x = following.location.x + following.size.x + this.config.followSize.x;
     } else if (this.state.facingDirection === 'right') {
-      this.location.x = this.state.following.location.x - this.size.x - this.config.followSize.x;
+      this.location.x = following.location.x - this.size.x - this.config.followSize.x;
     }
-    this.location.y = this.state.following.location.y + this.config.followSize.y;
+    if (following.state.jumpStart && !this.state.jumpStart) {
+      this.state.jumpStart = Math.max(this.game.tickCount, following.state.jumpStart + 15);
+    }
   }
+
+  this.updateJump();
 };

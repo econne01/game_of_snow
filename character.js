@@ -17,7 +17,6 @@ var Character = function(game, location) {
   };
   this.size = { x: 20, y: 30 };
   this.state.health = 1;
-  this.state.jumping = false;
   this.state.jumpStart = 0;
   this.state.facingDirection = 'left';
 };
@@ -44,15 +43,20 @@ Character.prototype.moveRight = function () {
 };
 
 Character.prototype.updateJump = function () {
+  if (!this.state.jumpStart ||
+      this.game.tickCount < this.state.jumpStart) {
+    // Jump hasn't started yet
+    return;
+  } else if (this.game.tickCount > this.state.jumpStart + this.config.jumpTime) {
+    // End of the jump
+    this.state.jumpStart = 0;
+    return;
+  }
   // Use physics to calculate velocity, acceleration
   // d = vt + 0.5at^2
   var initialVelocity = (4 * this.config.jumpHeight) / (this.config.jumpTime);
   var gravity = -2 * initialVelocity / this.config.jumpTime;
   var velocity = initialVelocity + (gravity * (this.game.tickCount - this.state.jumpStart));
-  if (this.state.jumpStart + this.config.jumpTime < this.game.tickCount) {
-    this.state.jumping = false;
-    return;
-  }
   this.location.y -= velocity;
 };
 

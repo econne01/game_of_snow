@@ -118,13 +118,12 @@ Player.prototype.update = function() {
 
   // If SPACE key is down, jump
   if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)) {
-    if (!this.state.jumping) {
-      this.state.jumping = true;
+    if (!this.state.jumpStart) {
       this.state.jumpStart = this.game.tickCount;
       this.keyboarder.setKeyState(this.keyboarder.KEYS.SPACE, this.keyboarder.STATES.NONE);
     }
   }
-  if (this.state.jumping) {
+  if (this.state.jumpStart) {
     this.updateJump();
   }
 
