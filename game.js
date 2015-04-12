@@ -104,17 +104,21 @@ Game.prototype = {
   gameOver: function() {
     this.inProgress = false;
     restartButton.classList.remove('hidden');
+    gameStatusElem.innerText = 'Game Over!';
+    gameStatusElem.classList.remove('hidden');
   },
 
   // **win()** ends the game. You win!
   win: function() {
     this.inProgress = false;
     restartButton.classList.remove('hidden');
-    console.log('You are a winner!');
+    gameStatusElem.innerText = 'You Win!';
+    gameStatusElem.classList.remove('hidden');
   }
 };
 
 var restartButton = document.getElementById("restart_button");
+var gameStatusElem = document.getElementById("game_status");
 
 window.onload = function () {
   // In index.html, there is a canvas tag that the game will be drawn in.
@@ -126,7 +130,8 @@ window.onload = function () {
   game.startGame(screen);
 
   restartButton.onclick = function () {
-      game.startGame(screen);
-      restartButton.classList.add('hidden');
+    game.startGame(screen);
+    restartButton.classList.add('hidden');
+    gameStatusElem.classList.add('hidden');
   }
 };
