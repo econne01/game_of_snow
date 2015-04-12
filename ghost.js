@@ -162,6 +162,15 @@ Ghost.prototype.update = function () {
     this.state.following = this.game.player;
     this.game.player.possessions.push(this);
   }
+  // Check if Ghost is hit by enemy
+  this.game.bodies.forEach(function (gameObj) {
+    if (gameObj instanceof Enemy && this.isColliding(gameObj)) {
+      if (this.state.following) {
+        // this.state.following.dropObject(this);
+        console.log('Ghost is hit!');
+      }
+    }
+  }, this);
 
   if (this.state.following) {
     var following = this.state.following;
@@ -174,7 +183,7 @@ Ghost.prototype.update = function () {
       this.location.x = following.location.x - this.size.x - this.config.followSize.x;
     }
     if (following.state.jumpStart && !this.state.jumpStart) {
-      this.state.jumpStart = Math.max(this.game.tickCount, following.state.jumpStart + 15);
+      this.state.jumpStart = Math.max(this.game.tickCount, following.state.jumpStart + 10);
     }
   }
 

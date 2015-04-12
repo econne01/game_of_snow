@@ -184,3 +184,19 @@ Player.prototype.update = function() {
 Player.prototype.isUnderWall = function () {
   return this.location.x >= 750;
 };
+
+/*
+ * Remove a given item from Player's possessions
+ * @param gameObj {Object} could be character or item
+ */
+Player.prototype.dropObject = function (gameObj) {
+  for (var i = 0; i < this.possessions.length; i++) {
+    if (this.possessions[i] == gameObj) {
+      this.possessions.splice(i, 1);
+      if (gameObj instanceof Character) {
+        gameObj.state.following = null;
+      }
+      return;
+    }
+  }
+}
